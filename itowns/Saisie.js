@@ -143,11 +143,13 @@ class Saisie {
               that.cliche = json.cliche;
               that.status = 'ras';
               // On modifie la couche OPI
+              console.log(this.opiLayer.opacity);
+              opiConfig.opacity = this.opiLayer.opacity;
               menuGlobe.removeLayersGUI(['Opi']);
               view.removeLayer('Opi');
               opiConfig.source.url = opiConfig.source.url.replace(/LAYER=.*\&FORMAT/, `LAYER=${json.cliche}&FORMAT`);
-              const opiLayer = new itowns.ColorLayer('Opi', opiConfig);
-              view.addLayer(opiLayer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
+              this.opiLayer = new itowns.ColorLayer('Opi', opiConfig);
+              view.addLayer(this.opiLayer).then(menuGlobe.addLayerGUI.bind(menuGlobe));
               itowns.ColorLayersOrdering.moveLayerToIndex(view, 'Ortho', 0);
               itowns.ColorLayersOrdering.moveLayerToIndex(view, 'Opi', 1);
               itowns.ColorLayersOrdering.moveLayerToIndex(view, 'Graph', 2);

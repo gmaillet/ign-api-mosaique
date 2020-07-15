@@ -7,6 +7,7 @@ import numpy as np
 from random import randrange
 import glob
 import json
+import os
 
 # jpegDriver = gdal.GetDriverByName( 'Jpeg' )
 pngDriver = gdal.GetDriverByName( 'png' )
@@ -159,7 +160,7 @@ def processImage(input_filename, input_r, input_v, input_b):
 tiles, epsg = getCapabilities('Capabilities.xml')
 outRasterSRS = gdal.osr.SpatialReference()
 outRasterSRS.ImportFromEPSG(epsg)
-conn_string = "PG:host=localhost dbname='pcrs' user='postgres'"
+conn_string = "PG:host=localhost dbname='pcrs' user='postgres' password='postgres'"
 db = gdal.OpenEx(conn_string, gdal.OF_VECTOR)
 if db is None:
     raise ValueError("Connection to database failed")
@@ -181,7 +182,7 @@ for filename in L:
         mtd[r] = {}
     if not(v in mtd[r]):
         mtd[r][v] = {}
-    mtd[r][v][b] = filename.split('/')[-1].split('.')[0] 
+    mtd[r][v][b] = filename.split(os.path.sep)[-1].split('.')[0] 
     processImage(filename, r, v, b)
 
 with open('cache/cache_mtd.json', 'w') as outfile:

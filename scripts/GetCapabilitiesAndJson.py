@@ -1,11 +1,14 @@
 import glob
 import json
+import os
 
 def exportTileLimits(layername):
     L = glob.glob('cache/*/*/*/'+layername+'.*')
+    print(L)
     tileMatrixSetLimits={}
     for dirname in L:
-        T = dirname.split('/')
+        T = dirname.split(os.path.sep)
+        print(T)
         z = int(T[1])
         y = int(T[2])
         x = int(T[3])
