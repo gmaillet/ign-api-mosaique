@@ -21,6 +21,7 @@ debug.log(`using cache directory: ${global.dir_cache}`);
 
 const wmts = require('./routes/wmts');
 const graph = require('./routes/graph');
+const patchs = require('./routes/patchs');
 
 app.cache_mtd = JSON.parse(fs.readFileSync(`${global.dir_cache}/cache_mtd.json`));
 
@@ -43,6 +44,7 @@ app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 
 app.use('/', wmts);
 app.use('/', graph);
+app.use('/', patchs);
 
 module.exports = app.listen(PORT, () => {
   debug.log(`URL de l'api : http://localhost:${PORT} \nURL de la documentation swagger : http://localhost:${PORT}/doc`);

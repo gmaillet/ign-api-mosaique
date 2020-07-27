@@ -46,37 +46,4 @@ describe('Graph', () => {
         });
     });
   });
-
-  describe('Post graph/patch', () => {
-    it('should return an error', (done) => {
-      chai.request(server)
-        .post('/graph/patch')
-        .end((err, res) => {
-          should.equal(err, null);
-          res.should.have.status(500);
-          done();
-        });
-    });
-  });
-
-  describe('Post graph/patch', () => {
-    it('should return an works', (done) => {
-      chai.request(server)
-        .post('/graph/patch')
-        .send({
-          type: 'FeatureCollection',
-          features: [
-            {
-              type: 'Feature',
-              properties: { color: [0, 0, 0], cliche: 'unkown' },
-              geometry: { type: 'Polygon', coordinates: [[[0, 0], [10, 0], [10, 10], [0, 10], [0, 0]]] },
-            }],
-        })
-        .end((err, res) => {
-          should.equal(err, null);
-          res.should.have.status(500);
-          done();
-        });
-    });
-  });
 });
