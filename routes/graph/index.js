@@ -153,13 +153,17 @@ router.get('/graph', [
   const { y } = params;
 
   debug(x, y);
-  const X = 0;
-  const Y = 12000000;
-  const R = 178.571428571429 * 0.00028;
+  // on cherche la meilleur resolution
+  let fullRes;
+  req.app.tileSet.forEach((level) => {
+    if ((!fullRes) || (fullRes.resolution > level.resolution)) {
+      fullRes = level;
+    }
+  });
 
   // il faut trouver la tuile
-  const Px = (x - X) / R;
-  const Py = (Y - y) / R;
+  const Px = (x - fullRes.x0) / fullRes.resolution;
+  const Py = (fullRes.y0 - y) / fullRes.resolution;
   const Tx = Math.floor(Px / 256);
   const Ty = Math.floor(Py / 256);
   const I = Math.floor(Px - Tx * 256);

@@ -7,7 +7,8 @@ const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const debug = require('debug');
 
-const PORT = 8081;
+const {argv} = require('yargs')
+
 
 const app = express();
 
@@ -24,6 +25,27 @@ const graph = require('./routes/graph');
 const patchs = require('./routes/patchs');
 
 app.cache_mtd = JSON.parse(fs.readFileSync(`${global.dir_cache}/cache_mtd.json`));
+// app.cacheRoot = argv.cache ? argv.cache : 'cache';
+const PORT = argv.port ? argv.port : 8081;
+
+// on charge les mtd du cache
+app.cache_mtd = JSON.parse(fs.readFileSync(`${global.dir_cache}/cache_mtd.json`));
+app.tileSet = JSON.parse(fs.readFileSync(`${global.dir_cache}/tileSet.json`));
+app.activePatchs = JSON.parse(fs.readFileSync(`${global.dir_cache}/activePatchs.geojson`));
+app.unactivePatchs = JSON.parse(fs.readFileSync(`${global.dir_cache}/unactivePatchs.geojson`));
+
+// on trouve l'Id du prochain patch (max des Id + 1)
+app.currentPatchId = 0;
+app.activePatchs.features.forEach((feature) => {
+  if (feature.patchId >= app.currentPatchId) {
+    app.currentPatchId = feature.patchId + 1;
+  }
+});
+app.unactivePatchs.features.forEach((feature) => {
+  if (feature.patchId >= app.currentPatchId) {
+    app.currentPatchId = feature.patchId + 1;
+  }
+});
 
 app.use(cors());
 app.use(bodyParser.json());

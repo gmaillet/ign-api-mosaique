@@ -92,7 +92,7 @@ class Saisie {
     const dataStr = JSON.stringify(geojson);
     view.scene.remove(this.currentMeasure);
     // On post le geojson sur l'API
-    fetch(`http://localhost:8081/graph/patch?`,
+    fetch(`http://localhost:8081/patch?`,
       {
         method: 'POST',
         headers: {
