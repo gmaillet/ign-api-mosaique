@@ -7,17 +7,11 @@ const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const debug = require('debug');
 
-const {argv} = require('yargs')
-
+const { argv } = require('yargs');
 
 const app = express();
 
-global.dir_cache = 'cache';
-// on charge les mtd du cache, en fonction de l'option de démarrage (test ou pas)
-// pour test, option "--cache_test"
-if (process.argv.indexOf('--cache_test') > 0) {
-  global.dir_cache = 'cache_test';
-}
+global.dir_cache = argv.cache ? argv.cache : 'cache';
 debug.log(`using cache directory: ${global.dir_cache}`);
 
 const wmts = require('./routes/wmts');
@@ -51,8 +45,8 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
-  debug.log(req.method, ' ', req.path, ' ', req.body);
-  debug.log(`received at ${Date.now()}`);
+  // debug.log(req.method, ' ', req.path, ' ', req.body);
+  // debug.log(`received at ${Date.now()}`);
   next();
 });
 
