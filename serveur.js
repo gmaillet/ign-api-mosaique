@@ -9,6 +9,8 @@ const debug = require('debug');
 
 const { argv } = require('yargs');
 
+const nocache = require('nocache');
+
 const app = express();
 
 global.dir_cache = argv.cache ? argv.cache : 'cache';
@@ -41,6 +43,10 @@ app.unactivePatchs.features.forEach((feature) => {
   }
 });
 
+// desactive la mise en cache des images par le navigateur - OK Chrome/Chromium et Firefox
+// effet : maj autom apres saisie - OK Chrome/Chromium, Pas OK Firefox
+app.use(nocache());
+
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -65,3 +71,4 @@ app.use('/', patchs);
 module.exports = app.listen(PORT, () => {
   debug.log(`URL de l'api : http://localhost:${PORT} \nURL de la documentation swagger : http://localhost:${PORT}/doc`);
 });
+
